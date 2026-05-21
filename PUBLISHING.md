@@ -1,26 +1,44 @@
 # 发布 checklist
 
-## 发布前必改
+## 发布前检查
 
-编辑 `Cargo.toml`：
+- [x] `Cargo.toml` 已填写 `kingning2` 与 GitHub 仓库地址  
+- [ ] 代码已推到 https://github.com/kingning2/video-subtitle（见下方「创建 GitHub 仓库」）  
+- [ ] （可选）把 `authors` 邮箱改成你的真实邮箱或 GitHub 提供的 noreply 地址  
+- [x] crates.io 上 **尚无** `video-subtitle` 同名 crate，可以发布  
 
-```toml
-authors = ["你的名字 <你的邮箱>"]
-repository = "https://github.com/你的用户名/video-subtitle"
-homepage = "https://github.com/你的用户名/video-subtitle"
+若 crate 名被占用，可改成例如 `video-subtitle-cli`，并同步修改 `Cargo.toml` 的 `name` 与 README。
+
+## 创建 GitHub 仓库（当前尚未创建）
+
+1. 打开 https://github.com/new  
+2. Repository name：`video-subtitle`  
+3. Owner：`kingning2`  
+4. **不要**勾选 “Add a README”（本地已有）  
+5. 创建后在本机执行：
+
+```powershell
+cd D:\Desktop\test
+git remote add origin https://github.com/kingning2/video-subtitle.git
+git push -u origin master
 ```
 
-若 crate 名 `video-subtitle` 已被占用，可改成例如 `video-subtitle-cli`，并同步修改 `Cargo.toml` 的 `name` 与 README 中的安装命令。
+若 GitHub 提示用 `main` 分支：
+
+```powershell
+git branch -M main
+git push -u origin main
+```
 
 ## 首次发布步骤
 
 ```powershell
 cd D:\Desktop\test
 
-# 1. 初始化 git（cargo publish 建议有版本控制）
-git init
-git add .
-git commit -m "chore: prepare v0.1.0 for crates.io"
+# 1. 确保代码已 push 到 GitHub（见上一节）
+git remote add origin https://github.com/kingning2/video-subtitle.git
+git push -u origin master
+# 若默认分支是 main：git branch -M main && git push -u origin main
 
 # 2. 注册 crates.io 账号，在个人设置里创建 API Token
 #    https://crates.io/settings/tokens

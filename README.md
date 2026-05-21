@@ -18,7 +18,7 @@ cargo install video-subtitle
 ### 从源码
 
 ```bash
-git clone https://github.com/YOUR_USER/video-subtitle
+git clone https://github.com/kingning2/video-subtitle
 cd video-subtitle
 cargo install --path .
 ```
@@ -73,8 +73,7 @@ println!("SRT: {}", output.srt_path.display());
 ## 发布到 crates.io（维护者）
 
 1. 在 [crates.io](https://crates.io) 注册并获取 API Token  
-2. 修改 `Cargo.toml` 中的 `authors`、`repository`、`homepage` 为你的信息  
-3. 登录并发布：
+2. 登录并发布（详见 [PUBLISHING.md](PUBLISHING.md)）：
 
 ```bash
 cargo login
