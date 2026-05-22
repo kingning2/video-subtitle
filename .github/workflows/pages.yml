@@ -1,5 +1,9 @@
 # Publishes a minimal landing page. Name must match register-to-portfolio workflow_run.
-# Repo Settings → Pages → Build and deployment → Source: GitHub Actions
+#
+# REQUIRED (once per repo, or deploy fails with "Get Pages site failed"):
+#   https://github.com/kingning2/video-subtitle/settings/pages
+#   Build and deployment → Source → "GitHub Actions"
+# Then re-run this workflow (Actions → Deploy to GitHub Pages → Re-run).
 
 name: Deploy to GitHub Pages
 

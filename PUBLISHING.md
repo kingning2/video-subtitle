@@ -38,7 +38,13 @@ git branch -M main
 git push -u origin main
 ```
 
-推送后打开仓库 **Settings → Pages → Build and deployment**，将 **Source** 设为 **GitHub Actions**（否则 Pages 部署 workflow 不会出站点）。
+### 启用 GitHub Pages（必做，否则 Deploy 报 Not Found）
+
+1. 打开 https://github.com/kingning2/video-subtitle/settings/pages  
+2. **Build and deployment** → **Source** 选 **GitHub Actions**（不要选 Deploy from a branch）  
+3. 保存后进入 **Actions** → **Deploy to GitHub Pages** → **Re-run all jobs**
+
+若仍失败，确认仓库 **Settings → Actions → General → Workflow permissions** 为 **Read and write**。
 
 ## GitHub Actions
 
@@ -97,7 +103,8 @@ video-subtitle --help
 | 问题 | 处理 |
 |------|------|
 | `git push` 认证失败 | 使用 HTTPS + PAT，或配置 SSH `git@github.com:kingning2/video-subtitle.git` |
-| Pages 无站点 | Settings → Pages → Source 选 **GitHub Actions** |
+| `Get Pages site failed` / Not Found | 先到 Settings → Pages，Source 选 **GitHub Actions**，再 Re-run Deploy workflow |
+| Pages 无站点 | 同上；勿选 “Deploy from a branch” |
 | register 不触发 | 确认 Pages workflow 名称为 **Deploy to GitHub Pages**；或手动 Run register workflow |
 | Invalid registerKey | 本仓 `PORTFOLIO_REGISTER_KEY` 与 xiaoman-projects 不一致 |
 | CI 编译 whisper-rs 慢 | 正常；需 cmake 与 C++ 工具链 |
