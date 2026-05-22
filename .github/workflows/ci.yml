@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install native build deps (whisper-rs)
+        run: sudo apt-get update && sudo apt-get install -y cmake build-essential pkg-config
+
+      - name: cargo check
+        run: cargo check --all-targets
+
+      - name: cargo clippy
+        run: cargo clippy --all-targets -- -D warnings

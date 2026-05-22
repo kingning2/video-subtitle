@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>video-subtitle</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 40rem;
+        margin: 3rem auto;
+        padding: 0 1rem;
+        line-height: 1.6;
+      }
+      a {
+        color: #0969da;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>video-subtitle</h1>
+    <p>视频自动字幕：FFmpeg 提取音频 → Whisper 识别 → SRT → FFmpeg 烧录硬字幕。</p>
+    <ul>
+      <li><a href="https://github.com/kingning2/video-subtitle">GitHub 仓库</a></li>
+      <li><a href="https://crates.io/crates/video-subtitle">crates.io</a></li>
+      <li><a href="https://docs.rs/video-subtitle">docs.rs 文档</a></li>
+    </ul>
+    <pre><code>cargo install video-subtitle
+video-subtitle -i input.mp4 -m /path/to/ggml-small.bin -l zh</code></pre>
+  </body>
+</html>
