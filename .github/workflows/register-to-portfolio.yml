@@ -23,21 +23,40 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
+      - name: Build client payload
+        id: payload
+        env:
+          REGISTER_KEY: ${{ secrets.PORTFOLIO_REGISTER_KEY }}
+          REPO_ID: ${{ github.event_name == 'workflow_dispatch' && github.event.repository.name || github.event.workflow_run.head_repository.name }}
+          GITHUB_URL: ${{ github.event_name == 'workflow_dispatch' && format('https://github.com/{0}', github.repository) || format('https://github.com/{0}', github.event.workflow_run.head_repository.full_name) }}
+          UPDATED_AT: ${{ github.event_name == 'workflow_dispatch' && github.event.repository.updated_at || github.event.workflow_run.updated_at }}
+        run: |
+          payload=$(jq -cn \
+            --arg registerKey "$REGISTER_KEY" \
+            --arg id "$REPO_ID" \
+            --arg githubUrl "$GITHUB_URL" \
+            --arg updatedAt "$UPDATED_AT" \
+            '{
+              registerKey: $registerKey,
+              id: $id,
+              type: "tool",
+              name: "video-subtitle",
+              description: "视频自动字幕：FFmpeg 提取音频 → Whisper 识别 → SRT → FFmpeg 烧录硬字幕（CLI + Rust 库）",
+              githubUrl: $githubUrl,
+              tags: ["Rust", "CLI", "FFmpeg", "Whisper", "字幕", "crates.io"],
+              problemSolved: "本地视频一键生成并烧录中英文字幕，无需云端 API 或手工打轴",
+              updatedAt: $updatedAt
+            }')
+          {
+            echo "json<<PAYLOAD_EOF"
+            echo "$payload"
+            echo "PAYLOAD_EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Send asset to xiaoman-projects
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PORTFOLIO_PAT }}
           repository: kingning2/xiaoman-projects
           event-type: upsert-asset
-          client-payload: |-
-            {
-              "registerKey": "${{ secrets.PORTFOLIO_REGISTER_KEY }}",
-              "id": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.name || github.event.workflow_run.head_repository.name }}",
-              "type": "tool",
-              "name": "video-subtitle",
-              "description": "视频自动字幕：FFmpeg 提取音频 → Whisper 识别 → SRT → FFmpeg 烧录硬字幕（CLI + Rust 库）",
-              "githubUrl": "${{ github.event_name == 'workflow_dispatch' && format('https://github.com/{0}', github.repository) || format('https://github.com/{0}', github.event.workflow_run.head_repository.full_name) }}",
-              "tags": ["Rust", "CLI", "FFmpeg", "Whisper", "字幕", "crates.io"],
-              "problemSolved": "本地视频一键生成并烧录中英文字幕，无需云端 API 或手工打轴",
-              "updatedAt": "${{ github.event_name == 'workflow_dispatch' && github.event.repository.updated_at || github.event.workflow_run.updated_at }}"
-            }
+          client-payload: ${{ steps.payload.outputs.json }}
